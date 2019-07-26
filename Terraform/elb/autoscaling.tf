@@ -20,7 +20,7 @@ resource "aws_autoscaling_group" "example-autoscaling" {
   force_delete = true
 
   tag {
-      key = "Name"
+      key = "Namesert"
       value = "elb_ec2 instance"
       propagate_at_launch = true
   }
