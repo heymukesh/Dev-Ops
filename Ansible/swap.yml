@@ -1,0 +1,21 @@
+---
+- name: Exchange Keys between servers
+  hosts: multi
+  become: yes
+ # become_user: flexera
+  #become_method: sudo
+
+  tasks:
+
+    - name: Remove swapfile from /etc/fstab
+      mount:
+        name: "{{ item }}"
+        fstype: swap
+        state: absent
+      with_items:
+       - swap
+       - none
+
+    - name: Disable swap
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0

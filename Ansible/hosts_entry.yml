@@ -1,0 +1,26 @@
+---
+  - name: host file update - Local DNS setup across all the servers
+    hosts: multi
+    gather_facts: yes
+    #sudo: yes
+    #vars_files:
+    #  - secret
+    tasks:
+
+    - name: "Update the /etc/hosts file with node name"
+      become: yes
+      remote_user: root
+      #become_method: sudo
+      tags: etchostsupdate
+      lineinfile:
+        path: /etc/hosts
+        regexp: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+        line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+        #dest: /etc/hosts
+        #regexp: '.*{{ item }}$'
+        #line: '{{ hostvars[item].ansible_default_ipv4.address }} {{item}}'
+        state: present
+        backup: yes
+      register: etchostsupdate
+      when: ansible_hostname != "item" or ansible_hostname == "item"
+      with_items: "{{groups['multi']}}"
