@@ -1,0 +1,9 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.80.148.177	build-machine-0	build-machine-0
+10.80.151.112	jenkins-master	jenkins-master
+10.80.149.209	jenkins-slave-0	jenkins-slave-0
+10.80.149.189	tomcat-docker	tomcat-docker
+10.80.148.175	k8s-node-1	k8s-node-1
+10.80.149.110	k8s-node-0	k8s-node-0
+10.80.151.199	k8s-master	k8s-master
