@@ -1,23 +1,14 @@
 [build]
-build-machine-0 ansible_host=10.80.148.177 ansible_user=flexera
+build-machine-0 ansible_host=10.80.148.177 
 [master]
-k8s-master ansible_host=10.80.151.199 #ansible_user=flexera
+k8s-master ansible_host=10.80.151.199 
 [workers]
-k8s-node-1 ansible_host=10.80.149.110 #ansible_user=flexera
-k8s-node-0 ansible_host=10.80.148.175 #ansible_user=flexera
+k8s-node-1 ansible_host=10.80.149.110 
+k8s-node-0 ansible_host=10.80.148.175 
 [docker]
-tomcat-docker ansible_host=10.80.149.189 #ansible_user=flexera
+tomcat-docker ansible_host=10.80.149.189 
 [jenkins]
-jenkins-slave-0 ansible_host=10.80.149.209 ansible_user=flexera
+jenkins-slave-0 ansible_host=10.80.149.209 
 [slaves] 
-jenkins-master ansible_host=10.80.151.112 ansible_user=flexera
-
-[multi]
-10.80.148.177
-10.80.151.112
-10.80.149.209
-10.80.149.189
-10.80.148.175
-10.80.149.110
-10.80.151.199
+jenkins-master ansible_host=10.80.151.112 
 
