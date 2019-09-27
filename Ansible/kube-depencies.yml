@@ -1,0 +1,94 @@
+- hosts: workers, master
+  remote_user: root
+  tasks:
+
+   - name: disable SELinux
+     shell: setenforce 0
+
+   - name: disable SELinux on reboot
+     selinux:
+       state: disabled
+          
+   - name: Remove swapfile from /etc/fstab
+     mount:
+       name: swap
+       fstype: swap
+       state: absent
+
+   - name: Disable swap
+     command: swapoff -a
+     when: ansible_swaptotal_mb > 0
+
+   - name: load the kernel module
+     modprobe:
+       name: br_netfilter
+       state: present
+
+   - name: ensure net.bridge.bridge-nf-call-ip6tables is set to 1
+     sysctl:
+       name: net.bridge.bridge-nf-call-ip6tables
+       value: '1'
+       state: present
+
+   - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
+     sysctl:
+       name: net.bridge.bridge-nf-call-iptables
+       value: '1'
+       state: present
+   
+   - name: Add Docker Repository
+     get_url:
+       url: https://download.docker.com/linux/centos/docker-ce.repo
+       dest: /etc/yum.repos.d/
+
+   - name: Install containerd.io
+     dnf:
+       name: https://download.docker.com/linux/centos/7/x86_64/edge/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+       #enablerepo: docker-ce-edge 
+       state: present
+
+   - name: Install Docker-ce
+     #shell: dnf install --nobest docker-ce -y
+     dnf:
+       name: docker-ce
+       state: present
+
+   - name: enable docker service is started and enabled
+     systemd:
+       name: docker
+       enabled: yes
+       state: started
+
+   - name: add Kubernetes dnf repository
+     yum_repository:
+       name: Kubernetes
+       description: Kubernetes dnf repository
+       baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+       gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+       gpgcheck: yes
+
+   - name: install kubelet
+     dnf:
+        name: kubelet
+        state: present
+        update_cache: true
+
+   - name: install kubeadm
+     dnf:
+        name: kubeadm
+        state: present
+
+   - name: start kubelet
+     service:
+       name: kubelet
+       enabled: yes
+       state: started
+
+       #- hosts: master
+       #  become: yes
+       #  tasks:
+       #   - name: install kubectl
+       #     dnf:
+       #        name: kubectl
+       #        state: present
+       #        allow_downgrade: yes

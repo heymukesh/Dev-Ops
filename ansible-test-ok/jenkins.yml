@@ -1,0 +1,47 @@
+---
+- hosts: jenkins-master, jenkins-slave-0
+  become: yes
+  tasks:
+   - name: Install Java
+     dnf:
+       name: java
+       state: latest
+
+   - name: Install Java-Devel
+     dnf:
+       name: java-devel
+       state: latest
+
+- hosts: jenkins-master
+  become: yes
+  tasks:
+   - name: Add Jenkins Repository
+     get_url:
+       url: https://pkg.jenkins.io/redhat/jenkins.repo
+       dest: /etc/yum.repos.d/
+
+   - name: Import Jenkins Repo Keys
+     rpm_key:
+       key: https://pkg.jenkins.io/redhat/jenkins.io.key
+       state: present
+
+   - name: Install Jenkins
+     dnf:
+       name: jenkins
+       state: latest
+
+   - name: enable jenkins service is started and enabled
+     systemd:
+       name: jenkins
+       enabled: yes
+       state: started
+
+- hosts: all
+  become: yes
+  tasks:
+   - name: stop & disable firewall
+     systemd:
+       name: firewalld
+       enabled: no
+       state: stopped
+

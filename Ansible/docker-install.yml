@@ -1,0 +1,12 @@
+- name: Add Docker GPG Key
+  rpm_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  rpm_repository:
+    repo: rpm https://download.docker.com/linux/centos/docker-ce.repo
+    state: present
+
+- name: Update apt and install docker-ce
+  dnf: update_cache=yes name=docker-ce state=latest

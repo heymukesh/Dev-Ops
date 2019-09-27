@@ -1,0 +1,15 @@
+---
+- hosts: multi
+  tasks:
+  - name: make direcotry
+    file:
+      path: "/home/flexera/.ssh"
+      state: directory
+  - name: create empty file
+    file:
+      path: "/home/flexera/.ssh/authorized_keys"
+      state: touch
+  - name: put pubkey
+    lineinfile:
+      path: "/home/flexera/.ssh/authorized_keys"
+      line: "{{ pubkey }}"

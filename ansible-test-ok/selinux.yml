@@ -1,0 +1,8 @@
+---
+- hosts: multi
+  become: yes
+  tasks:
+   - name: Disable SELinux
+     shell: setenforce 0
+     #- name: Disable SELinux
+     #selinux: state=disabled
