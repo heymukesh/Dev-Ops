@@ -1,0 +1,26 @@
+# copywarfile.yml
+---
+- hosts: tomcat 
+  become_user: flexera
+  become_method: sudo
+  tasks: 
+    - name: copy jar/war onto tomcat9 servers
+      copy:
+        src: /opt/artifacts/webapp/webapp.war
+        dest: /opt/tomcat9/temp
+        #dest: /opt/tomcat9/webapps
+        force: yes
+    
+    - name: copy jar/war onto tomcat8 servers
+      copy:
+        src: /opt/artifacts/webapp/webapp.war
+        dest: /opt/tomcat8/temp
+        #dest: /opt/tomcat8/webapps
+        force: yes
+    
+    - name: copy jar/war onto tomcat7 servers
+      copy:
+        src: /opt/artifacts/webapp/webapp.war
+        dest: /opt/tomcat7/temp
+        #dest: /opt/tomcat7/webapps
+        force: yes

@@ -1,0 +1,18 @@
+---
+- hosts: docker
+  become_user: flexera
+  become_method: sudo
+  tasks:
+
+   - name: stop the container
+     shell: docker stop flexera_tomcat
+
+   - name: remove the container
+     shell: docker rm -f flexera_tomcat
+
+   - name: remove the images
+     shell: docker rmi heymukesh/ansible
+     #shell: docker rmi heymukesh/:latest
+
+   - name: create container with latest docker image
+     shell: docker run -d --name flexera_tomcat -p 8090:8080 heymukesh/ansible:latest
