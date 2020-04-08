@@ -1,0 +1,28 @@
+---
+ - hosts: localhost
+   tasks:
+
+   - name: stop rabbitmq service
+     service: name=rabbitmq-server state=stopped
+
+   - name: upgrade erlang
+     yum:
+      name: ./erlang-22.3-1.el7.x86_64.rpm
+      state: present
+
+   - name: upgrade rabbitmq
+     command: rpm -Uvh ./rabbitmq-server-3.8.3-1.el7.noarch.rpm
+
+   - name: enable prometheus plugin
+     rabbitmq_plugin:
+       names: rabbitmq_prometheus
+       state: enabled
+
+   - name: enable mgt plugin
+     command: rabbitmq-plugins enable rabbitmq_management
+
+   - name: enable ldap plugin
+     command: rabbitmq-plugins enable rabbitmq_auth_backend_ldap
+  
+   - name: start rabbitmq service
+     service: name=rabbitmq-server enabled=yes state=started   
